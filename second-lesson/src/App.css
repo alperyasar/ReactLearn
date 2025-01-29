@@ -1,0 +1,15 @@
+.title{
+  color:brown;
+}
+
+.price{
+  color:blue;
+  font-size:large;
+  background-color: yellow;
+}
+
+.price-discount{
+  color:blue;
+  font-size:large;
+  background-color: green;
+}
