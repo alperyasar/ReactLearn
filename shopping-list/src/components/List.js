@@ -1,6 +1,7 @@
 import Item from "./Item";
 
-const List = (items, onDeleteItem, onUpdateItem) => {
+const List = ({ items, onDeleteItem, onUpdateItem }) => {
+  console.log("Item count:", items.length);
   return (
     <>
       {items.length > 0 ? (
