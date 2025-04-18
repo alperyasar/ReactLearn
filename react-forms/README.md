@@ -1,7 +1,5 @@
 # 📝 React Forms with Validation
 
-# 📝 React Form Validation App
-
 A React-based application demonstrating form validation techniques, custom hooks, and state management. Built as part of an educational series on modern form handling in React.
 
 ---
