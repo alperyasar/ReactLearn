@@ -200,6 +200,3 @@ if (data.password !== data.repassword) {
 - Add form submission loading states
 - Implement CAPTCHA verification
 
-A React-based application demonstrating form validation techniques, custom hooks, and state management. Built as part of an educational series on modern form handling in React.
-
-A React-based application demonstrating form validation techniques, custom hooks, and state management. Built as part of an educational series on modern form handling in React.
