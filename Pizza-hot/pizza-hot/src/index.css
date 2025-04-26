@@ -1,65 +1,103 @@
 .item {
-    transition: all .15s ease;
+  transition: all 0.15s ease;
 }
 
 .item:hover {
-    box-shadow: 0 0 30px rgba(0, 0, 0, .16);
-    -webkit-transform: translateY(-10px);
-    transform: translateY(-10px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.16);
+  -webkit-transform: translateY(-10px);
+  transform: translateY(-10px);
 }
 .item-price {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.modal-box{
-    background-color: #fbfbfb;
-    border-radius: 10px;
-    padding: 20px;
-    border: none;
-    box-shadow: 0 0 30px rgba(0, 0, 0, .16);
-    width: 80%;
-    max-width: 45rem;
+.modal-box {
+  background-color: #fbfbfb;
+  border-radius: 10px;
+  padding: 20px;
+  border: none;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.16);
+  width: 80%;
+  max-width: 45rem;
+}
+
+/* Modal içindeki butonlara odak stili uygulamasın */
+.modal-box .btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 dialog::backdrop {
-    background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-dialog[open]{
-    animation: fadeIn 0.3s ease-in-out;
-    backdrop-filter: blur(5px); 
+dialog[open] {
+  animation: fadeIn 0.3s ease-in-out;
+  backdrop-filter: blur(5px);
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 @media (max-width: 768px) {
-    .item-price {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .item-price span {
-        margin-bottom: 5px;
-    }
+  .item-price {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .item-price span {
+    margin-bottom: 5px;
+  }
 }
 
 .actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    margin-left: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 45px;
 }
 
 .modal-footer {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Konteynerin relative olması gerekiyor */
+.position-relative {
+  position: relative;
+}
+
+/* Bubble stili */
+.error-bubble {
+  position: absolute;
+  bottom: 100%; /* input’un hemen üstü */
+  left: 0;
+  transform: translateY(-8px);
+  background: #f8d7da;
+  color: #842029;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* Altındaki küçük üçgen (pointer) */
+.error-bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%; /* kendi kutusunun altında */
+  left: 12px; /* üçgenin x konumu */
+  border-width: 6px 6px 0 6px;
+  border-style: solid;
+  border-color: #f8d7da transparent transparent transparent;
 }

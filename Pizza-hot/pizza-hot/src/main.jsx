@@ -4,14 +4,17 @@ import "./index.css";
 
 import App from "./App";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { CartContext, CartProvider } from "./contexts/CartContext";
+import { CartProvider } from "./contexts/CartContext";
+import { UIContextProvider } from "./components/UI/UIContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
-    </ThemeProvider>
+    <UIContextProvider>
+      <ThemeProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </ThemeProvider>
+    </UIContextProvider>
   </StrictMode>
 );

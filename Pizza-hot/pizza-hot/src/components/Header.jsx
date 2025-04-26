@@ -1,14 +1,16 @@
+// src/components/Header.jsx
 import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { CartContext } from "../contexts/CartContext";
+import { UIContext } from "./UI/UIContext";
 
 export default function Header() {
   const { color } = useContext(ThemeContext);
   const { items } = useContext(CartContext);
+  const { showCart } = useContext(UIContext);
 
-  const totalCartItems = items.reduce((total, item) => {
-    return total + item.quantity;
-  }, 0);
+  const totalCartItems = items.reduce((sum, i) => sum + i.quantity, 0);
+
   return (
     <header>
       <nav
@@ -19,7 +21,7 @@ export default function Header() {
           <a href="#" className="navbar-brand">
             🍕 Pizza Hot
           </a>
-          <button className="btn btn-dark">
+          <button onClick={showCart} className="btn btn-dark">
             <i className="bi bi-cart3"></i>
             <span className="ms-2">({totalCartItems})</span>
           </button>
