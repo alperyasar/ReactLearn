@@ -1,8 +1,14 @@
 import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
+import { CartContext } from "../contexts/CartContext";
 
 export default function Pizza({ pizza }) {
   const { color, mode } = useContext(ThemeContext);
+  const { addItem } = useContext(CartContext);
+
+  function handleAddToCart(pizza) {
+    addItem(pizza);
+  }
   return (
     <div className="col">
       <div className="card item">
@@ -16,7 +22,10 @@ export default function Pizza({ pizza }) {
           <p className="card-text">{pizza.description}</p>
           <div className="item-price">
             <b>{pizza.price} ₺</b>
-            <button className={`btn btn-sm btn-outline-${color}`}>
+            <button
+              className={`btn btn-sm btn-outline-${color}`}
+              onClick={() => handleAddToCart(pizza)}
+            >
               Sepete Ekle
             </button>
           </div>
