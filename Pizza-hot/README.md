@@ -88,7 +88,7 @@ This project is created for educational purposes to demonstrate:
 | Ana Sayfa                                    | Sepet                                    | Checkout Form                                  |
 | -------------------------------------------- | ---------------------------------------- | ---------------------------------------------- |
 | ![Ana Sayfa](https://github.com/alperyasar/ReactLearn/blob/main/Pizza-hot/screenshots/home.png) | ![Sepet](https://github.com/alperyasar/ReactLearn/blob/main/Pizza-hot/screenshots/cart.png) | ![Checkout](https://github.com/alperyasar/ReactLearn/blob/main/Pizza-hot/screenshots/checkout.png) |
-![Pizza-Hot](https://github.com/alperyasar/ReactLearn/raw/main/pizza-hot/screenshots/ScreenExplaination.gif)---
+![Pizza-Hot](https://github.com/alperyasar/ReactLearn/blob/main/Pizza-hot/screenshots/ScreenExplaination.gif)---
 
 ## 🚩 Getting Started
 
