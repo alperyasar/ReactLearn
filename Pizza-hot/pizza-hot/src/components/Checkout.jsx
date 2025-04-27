@@ -1,11 +1,22 @@
+// src/components/Checkout.jsx
 import { useContext, useEffect, useState } from "react";
 import Modal from "./UI/Modal";
 import { UIContext } from "./UI/UIContext";
 import { CartContext } from "../contexts/CartContext";
+import useFetch from "../hooks/useFetch";
+
+const config = {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+};
 
 export default function Checkout() {
   const { UIProgress, hideCheckout } = useContext(UIContext);
   const { items, clearCart } = useContext(CartContext);
+  const { data, loading, error, sendRequest } = useFetch(
+    "http://localhost:3000/orders",
+    config
+  );
 
   // Sepet toplamı
   const cartTotal = items.reduce(
@@ -62,15 +73,8 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const customerData = {
-      name,
-      email,
-      phone,
-      city,
-      district,
-      street,
-      addressDetails,
-    };
+    const formData = new FormData(e.target);
+    const customerData = Object.fromEntries(formData.entries());
 
     const orderPayload = {
       order: {
@@ -80,24 +84,45 @@ export default function Checkout() {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderPayload),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Sunucu hatası");
-      }
-      // Başarı durumu: sepeti temizleyip checkout’u kapat
+      await sendRequest(orderPayload);
       clearCart();
       hideCheckout();
-      alert("Siparişiniz alındı!");
+      alert("Siparişiniz başarıyla alındı!");
     } catch (err) {
-      console.error(err);
       alert("Sipariş gönderilirken bir hata oldu: " + err.message);
     }
   };
+
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "30vh" }}
+      >
+        <div
+          className="spinner-border text-primary"
+          role="status"
+          style={{ width: "4rem", height: "4rem" }}
+        >
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "30vh" }}
+      >
+        <div className="alert alert-danger" role="alert">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          <strong>Hata:</strong> {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Modal open={UIProgress === "checkout"} className="cart-modal">
@@ -111,7 +136,6 @@ export default function Checkout() {
             <p className="text-muted">No items in your cart.</p>
           ) : (
             <>
-              {/* Sepet Özeti */}
               <ul className="list-group mb-3">
                 {items.map((item) => (
                   <li
@@ -130,9 +154,9 @@ export default function Checkout() {
                 </li>
               </ul>
 
-              {/* Teslimat Formu */}
               <div className="mb-2">
                 <input
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Ad Soyad"
@@ -148,6 +172,7 @@ export default function Checkout() {
                     <div className="error-bubble">{emailError}</div>
                   )}
                   <input
+                    name="email"
                     type="email"
                     className="form-control"
                     placeholder="E-posta"
@@ -162,6 +187,7 @@ export default function Checkout() {
                     <div className="error-bubble">{phoneError}</div>
                   )}
                   <input
+                    name="phone"
                     type="tel"
                     className="form-control"
                     placeholder="Telefon"
@@ -176,6 +202,7 @@ export default function Checkout() {
               <div className="row mb-2">
                 <div className="col">
                   <input
+                    name="city"
                     type="text"
                     className="form-control"
                     placeholder="Şehir"
@@ -186,6 +213,7 @@ export default function Checkout() {
                 </div>
                 <div className="col">
                   <input
+                    name="district"
                     type="text"
                     className="form-control"
                     placeholder="İlçe"
@@ -197,6 +225,7 @@ export default function Checkout() {
               </div>
               <div className="mb-2">
                 <input
+                  name="street"
                   type="text"
                   className="form-control"
                   placeholder="Sokak / Mahalle"
@@ -207,6 +236,7 @@ export default function Checkout() {
               </div>
               <div className="mb-2">
                 <input
+                  name="addressDetails"
                   type="text"
                   className="form-control"
                   placeholder="Adres Detayları"

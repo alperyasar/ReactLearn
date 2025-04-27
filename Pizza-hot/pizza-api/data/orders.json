@@ -28,5 +28,35 @@
       "addressDetails": "kekik sok"
     },
     "id": "1745686816652"
+  },
+  {
+    "items": [
+      {
+        "id": "4",
+        "title": "Margarita",
+        "description": "Pizza sosu, mozzarella peyniri",
+        "image": "4.jpg",
+        "price": "320",
+        "quantity": 1
+      },
+      {
+        "id": "3",
+        "title": "Sucuk Mısır",
+        "description": "Pizza sosu, mozzarella peyniri, sucuk, mısır",
+        "image": "3.jpg",
+        "price": "285",
+        "quantity": 1
+      }
+    ],
+    "customer": {
+      "name": "asdlapsd",
+      "email": "asdlpasd@gmail.com",
+      "phone": "53163395956",
+      "city": "istanbul",
+      "district": "tekirdağ",
+      "street": "sadas",
+      "addressDetails": "asdasd"
+    },
+    "id": "1745764916982"
   }
 ]
