@@ -58,5 +58,35 @@
       "addressDetails": "asdasd"
     },
     "id": "1745764916982"
+  },
+  {
+    "items": [
+      {
+        "id": "3",
+        "title": "Sucuk Mısır",
+        "description": "Pizza sosu, mozzarella peyniri, sucuk, mısır",
+        "image": "3.jpg",
+        "price": "285",
+        "quantity": 3
+      },
+      {
+        "id": "2",
+        "title": "Sebzesever",
+        "description": "Pizza sosu, mozzarella peyniri, mantar, yeşilbiber, soğan, domates, mısır",
+        "image": "2.jpg",
+        "price": "270",
+        "quantity": 1
+      }
+    ],
+    "customer": {
+      "name": "Alper YAŞAR",
+      "email": "alper1yasar@gmail.com",
+      "phone": "05316229596",
+      "city": "İstanbul",
+      "district": "ŞİŞLİ",
+      "street": "Kekik sok. no:24-26 Özdemir-yılmaz apt.",
+      "addressDetails": "Kekik sok. no:24-26 Özdemir-yılmaz apt."
+    },
+    "id": "1745787742550"
   }
 ]
