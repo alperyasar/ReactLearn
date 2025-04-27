@@ -87,7 +87,7 @@ This project is created for educational purposes to demonstrate:
 
 | Ana Sayfa                                    | Sepet                                    | Checkout Form                                  |
 | -------------------------------------------- | ---------------------------------------- | ---------------------------------------------- |
-| ![Ana Sayfa](https://./screenshots/home.png) | ![Sepet](https://./screenshots/cart.png) | ![Checkout](https://./screenshots/heckout.png) |
+| ![Ana Sayfa]([https://.](https://github.com/alperyasar/ReactLearn/raw/main/pizza-hot)/screenshots/home.png) | ![Sepet]([https://.](https://github.com/alperyasar/ReactLearn/raw/main/pizza-hot)/screenshots/cart.png) | ![Checkout]([https://.](https://github.com/alperyasar/ReactLearn/raw/main/pizza-hot)/screenshots/heckout.png) |
 
 ![Pizza-Hot](https://github.com/alperyasar/ReactLearn/raw/main/pizza-hot/screenshots/ScreenExplaination.gif)---
 
@@ -148,15 +148,3 @@ Open the application at `http://localhost:5173`.
 ## 🙌 Contributions
 
 Feel free to fork the project and submit pull requests for improvements. If you encounter any issues, please open an issue in the repository.
-
-## 📸 Ekran Görüntüleri
-
-| Ana Sayfa                                    | Sepet                                    | Tema Seçimi                              |
-| -------------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| ![Ana Sayfa](https://./screenshots/home.png) | ![Sepet](https://./screenshots/cart.png) | ![Tema](https://./screenshots/theme.png) |
-
-## 📸 Ekran Görüntüleri
-
-| Ana Sayfa                                    | Sepet                                    | Tema Seçimi                              |
-| -------------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| ![Ana Sayfa](https://./screenshots/home.png) | ![Sepet](https://./screenshots/cart.png) | ![Tema](https://./screenshots/theme.png) |
