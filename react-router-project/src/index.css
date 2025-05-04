@@ -307,3 +307,90 @@ form button {
     transform: translateY(0);
   }
 }
+
+/* ------- TAB NAVIGATION ------- */
+.courses-layout {
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.tab {
+  padding: 10px 22px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-sub);
+  text-decoration: none;
+  transition: all 0.25s;
+  font-weight: 500;
+}
+
+.tab:hover {
+  background: rgba(139, 92, 246, 0.25);
+  color: var(--text-main);
+}
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ------- FORM WRAPPER ------- */
+.form-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--card-glass);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px) saturate(160%);
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+.form-card h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-card label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent-light);
+}
+
+.form-card input,
+.form-card textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin-bottom: 22px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.form-card button {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+
+.form-card button:hover {
+  background: var(--accent-light);
+}
