@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
-import CoursesPage from "./pages/Courses";
+import CoursesPage, { coursesLoader } from "./pages/Courses";
 import Header from "./Components/Header";
 import Help from "./Components/HelpPage";
 import FAQPage from "./pages/help/FAQPage";
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "home", element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
-      { path: "courses", element: <CoursesPage /> },
+      { path: "courses", element: <CoursesPage />, loader: coursesLoader },
       {
         path: "help",
         element: <Help />,
