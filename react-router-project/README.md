@@ -25,7 +25,7 @@ Create, browse, edit and delete course cards – all styled with a dark UI and a
 
 ## 🎬 Live Demo / GIF
 
-![App walkthrough](https://github.com/alperyasar/ReactLearn/tree/main/react-router-project/screenshots/ScreenExplaination.gif)!
+[App walkthrough](https://github.com/alperyasar/ReactLearn/blob/main/react-router-project/screenshots/ScreenExplaination.gif)
 
 ## ✨ Features
 
