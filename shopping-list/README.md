@@ -39,7 +39,7 @@ shopping-list/
 ## 📸 Screenshots
 
 ### App Preview
-![Shopping List Demo] (screenshots/ScreenExplanation.gif)
+![Shopping List Demo](https://github.com/alperyasar/ReactLearn/blob/main/shopping-list/screenshots/ScreenExplaination.gif)
 **Explanation:** The GIF demonstrates adding items, marking items as completed, deleting individual items, and clearing the entire shopping list.
 
 ## 🛠 Technology Stack
