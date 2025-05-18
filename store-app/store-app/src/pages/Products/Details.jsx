@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import requests from "../../api/apiClient";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -23,34 +24,20 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchProductDetails();
-  }, [id]);
-
-  const fetchProductDetails = async () => {
-    try {
-      const response = await fetch(`http://localhost:5001/products/${id}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    let isMounted = true; // unmount sırasında setState engellemek için
+    (async () => {
+      setLoading(true);
+      try {
+        const data = await requests.products.getById(id); // Axios ile çek
+        if (isMounted) setProduct(data);
+      } catch (err) {
+        if (isMounted) setError(err.message);
+      } finally {
+        if (isMounted) setLoading(false);
       }
-
-      const data = await response.json();
-      console.log("Fetched product details:", data); // Debug log
-      setProduct(data);
-    } catch (error) {
-      console.error("Error fetching product details:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    })();
+    return () => (isMounted = false);
+  }, [id]);
 
   if (loading) {
     return (

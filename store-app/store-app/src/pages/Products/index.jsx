@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Typography, Skeleton, Alert, Box } from "@mui/material";
 import ProductCard from "../../components/ui/ProductCard";
+import requests from "../../api/apiClient";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState(null);
@@ -35,9 +36,8 @@ export default function ProductsPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("http://localhost:5001/products");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        setProducts(await res.json());
+        const res = await requests.products.get();
+        setProducts(res);
       } catch (err) {
         setError(err.message);
       }
