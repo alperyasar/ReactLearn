@@ -1,0 +1,23 @@
+/* src/theme/index.css */
+@import "@fontsource/roboto/300.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+@import "@fontsource/roboto/700.css";
+
+/* global reset - örnek */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+:root {
+  --appbar-letter-spacing: 0.3rem;
+}
+.logo {
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: var(--appbar-letter-spacing);
+  text-decoration: none;
+  color: inherit;
+}
