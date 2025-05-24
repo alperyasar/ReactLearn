@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment } from "react";
+import { useState, useRef, Fragment, Children } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -31,6 +31,7 @@ import Logo from "./Logo";
 const pages = [
   { name: "Home", path: "/home" },
   { name: "Products", path: "/products" },
+  { name: "Error", path: "/errors" },
 ];
 const settings = [
   { name: "Login", path: "/login" },

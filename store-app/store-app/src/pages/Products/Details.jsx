@@ -32,6 +32,7 @@ const ProductDetails = () => {
         if (isMounted) setProduct(data);
       } catch (err) {
         if (isMounted) setError(err.message);
+        console.log(err.message);
       } finally {
         if (isMounted) setLoading(false);
       }
