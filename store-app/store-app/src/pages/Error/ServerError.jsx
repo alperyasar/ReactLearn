@@ -15,7 +15,7 @@ export default function ServerErrorPage() {
           </Alert>
         </>
       ) : (
-        <>
+         <>
           <Typography variant="h4">Server Error</Typography>
           <Alert severity="error">Internal Server Error</Alert>
         </>

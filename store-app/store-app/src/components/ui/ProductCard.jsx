@@ -1,3 +1,5 @@
+// src/components/ui/ProductCard.jsx
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -6,6 +8,7 @@ import {
   Typography,
   Box,
   IconButton,
+  CircularProgress, // ← eklendi
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -15,6 +18,16 @@ import { useCart } from "../../context/CartContext";
 export default function ProductCard({ product, liked, onToggleLike }) {
   const navigate = useNavigate();
   const { add } = useCart();
+  const [loading, setLoading] = useState(false);
+
+  const handleAdd = () => {
+    setLoading(true);
+    add(product) // add() artık Promise döndürüyor
+      .catch(() => {
+        /* toast vs. gösterebilirsin */
+      })
+      .finally(() => setLoading(false));
+  };
 
   return (
     <Card
@@ -23,12 +36,11 @@ export default function ProductCard({ product, liked, onToggleLike }) {
         display: "flex",
         flexDirection: "column",
         position: "relative",
-        transition: "transform 0.2s",
-        "&:hover": {
-          transform: "translateY(-4px)",
-        },
+        transition: "transform .2s",
+        "&:hover": { transform: "translateY(-4px)" },
       }}
     >
+      {/* ---- Görsel ---- */}
       <Box sx={{ position: "relative" }}>
         <CardMedia
           component="img"
@@ -52,8 +64,9 @@ export default function ProductCard({ product, liked, onToggleLike }) {
         </IconButton>
       </Box>
 
+      {/* ---- İçerik ---- */}
       <CardContent sx={{ p: 2, flexGrow: 1 }}>
-        <Typography gutterBottom variant="h6" component="h2" noWrap>
+        <Typography variant="h6" gutterBottom noWrap>
           {product.title}
         </Typography>
         <Typography
@@ -73,21 +86,18 @@ export default function ProductCard({ product, liked, onToggleLike }) {
         <Typography variant="h6" color="primary" gutterBottom>
           ${Number(product.price).toLocaleString()}
         </Typography>
+
+        {/* ---- Butonlar ---- */}
         <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
           <IconButton
             size="small"
-            onClick={() =>
-              add({
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                image: `http://localhost:5001/images/${product.image}`,
-              })
-            }
+            onClick={handleAdd}
+            disabled={loading}
             title="Add to Cart"
           >
-            <AddShoppingCartIcon />
+            {loading ? <CircularProgress size={20} /> : <AddShoppingCartIcon />}
           </IconButton>
+
           <IconButton
             size="small"
             onClick={() => navigate(`/products/${product.id}`)}

@@ -202,7 +202,7 @@ export default function Navbar() {
               )}
 
               {/* items */}
-              {cart.map(({ id, title, image, price, qty }) => (
+              {cart.map(({ id, title, image, qty }) => (
                 <Box
                   key={id}
                   sx={{ display: "flex", alignItems: "center", mb: 1.5 }}

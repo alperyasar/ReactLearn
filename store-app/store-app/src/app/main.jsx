@@ -6,14 +6,18 @@ import { theme } from "../theme";
 import "../theme/index.css";
 import App from "./App";
 import { CartProvider } from "../context/CartContext";
+import { store } from "../store/Store";
+import { Provider } from "react-redux";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <CartProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </Provider>
     </CartProvider>
   </React.StrictMode>
 );
