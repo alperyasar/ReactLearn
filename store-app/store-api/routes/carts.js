@@ -1,69 +1,71 @@
+// routes/carts.js
 const express = require("express");
-
-const {
-  getCart,
-  addItemToCart,
-  removeItem,
-  cartToDTO,
-} = require("../data/carts");
-
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const cart = await getCart(req.cookies.customerId);
+// Doğru import: listedeki ürünü ID ile getiren fonksiyon
+const { get: getProductById } = require("../data/products");
 
-    res.cookie("customerId", cart.customerId, {
-      maxAge: 1000 * 60 * 60 * 24 * 30,
-      httpOnly: true,
-    });
+// Demo: tek bir global sepet
+const cart = { cartItems: [] }; // { product, quantity }
 
-    return res.status(200).json(await cartToDTO(cart));
-  } catch (error) {
-    next(error);
-  }
+const toPid = (v) => String(v ?? "");
+
+// GET /carts -> sepeti getir
+router.get("/", (_req, res) => {
+  res.json(cart);
 });
 
+// POST /carts?productId=..&quantity=..
 router.post("/", async (req, res, next) => {
   try {
-    let cart = await getCart(req.cookies.customerId);
-    const productId = req.query.productId;
-    const quantity = parseInt(req.query.quantity ?? 1);
+    const productId = toPid(req.query.productId || req.body?.productId);
+    const quantity = Number(req.query.quantity || req.body?.quantity || 1);
+    if (!productId)
+      return res.status(400).json({ message: "productId is required" });
 
-    cart = await addItemToCart(productId, quantity, req.cookies.customerId);
+    // Ürünü data katmanından çek
+    const product = await getProductById(productId);
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
-    return res.status(201).json(await cartToDTO(cart));
-  } catch (error) {
-    next(error);
+    cart.cartItems = cart.cartItems || [];
+    const line = cart.cartItems.find(
+      (ci) => toPid(ci.product.id) === productId
+    );
+    if (line) line.quantity += quantity;
+    else cart.cartItems.push({ product, quantity });
+
+    res.json(cart);
+  } catch (e) {
+    next(e);
   }
 });
 
+// DELETE /carts?productId=..&quantity=..
 router.delete("/", async (req, res, next) => {
   try {
-    const productId = req.query.productId;
-    const quantity = parseInt(req.query.quantity);
+    const productId = toPid(req.query.productId || req.body?.productId);
+    const quantity = Number(req.query.quantity || req.body?.quantity || 1);
 
-    let cart = await removeItem(productId, quantity, req.cookies.customerId);
+    cart.cartItems = cart.cartItems || [];
+    const idx = cart.cartItems.findIndex(
+      (ci) => toPid(ci.product.id) === productId
+    );
+    if (idx < 0)
+      return res.status(404).json({ message: "Could not find the cart item" });
 
-    return res.status(200).json(await cartToDTO(cart));
-  } catch (error) {
-    next(error);
+    cart.cartItems[idx].quantity -= quantity;
+    if (cart.cartItems[idx].quantity <= 0) cart.cartItems.splice(idx, 1);
+
+    res.json(cart);
+  } catch (e) {
+    next(e);
   }
 });
 
-// const getCustomerId = (req) => {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
-//   let customerId = req.cookies.customerId;
-
-//   if (token != null) {
-//     jwt.verify(token, "secret", (err, decoded) => {
-//       if (!err) {
-//         customerId = decoded.username;
-//       }
-//     });
-//   }
-//   return customerId;
-// };
+// DELETE /carts/clear -> tümünü temizle
+router.delete("/clear", (_req, res) => {
+  cart.cartItems = [];
+  res.json(cart);
+});
 
 module.exports = router;

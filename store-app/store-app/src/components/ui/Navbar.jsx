@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment, Children } from "react";
+import { useState, useRef, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -45,12 +45,17 @@ export default function Navbar() {
   const [navAnchor, setNavAnchor] = useState(null);
   const [userAnchor, setUserAnchor] = useState(null);
   const [openCart, setOpenCart] = useState(false);
+  const [pending, setPending] = useState({});
+  const [clearing, setClearing] = useState(false);
   const cartBtnRef = useRef(null);
 
   /* ---- cart context ---- */
-  const { cart, inc, dec, remove, sync } = useCart();
+  const { cart, inc, dec, remove, clear } = useCart();
   const uniqueCount = cart.length;
-  const totalPrice = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const totalPrice = cart.reduce(
+    (sum, i) => sum + (Number(i.price) || 0) * (Number(i.qty) || 0),
+    0
+  );
 
   /* ---- helpers ---- */
   const go = (path) => {
@@ -60,14 +65,20 @@ export default function Navbar() {
     setOpenCart(false);
   };
 
-  const clearCart = () => sync([]); // tümünü sil
+  const lock = (id, fn) => async () => {
+    setPending((m) => ({ ...m, [id]: true }));
+    try {
+      await fn();
+    } finally {
+      setPending((m) => ({ ...m, [id]: false }));
+    }
+  };
 
   return (
     <Fragment>
       <AppBar position="static">
         <Container maxWidth="lg">
           <Toolbar disableGutters>
-            {/* desktop logo */}
             <ShoppingCartIcon
               sx={{ mr: 1, display: { xs: "none", md: "flex" } }}
             />
@@ -202,46 +213,59 @@ export default function Navbar() {
               )}
 
               {/* items */}
-              {cart.map(({ id, title, image, qty }) => (
-                <Box
-                  key={id}
-                  sx={{ display: "flex", alignItems: "center", mb: 1.5 }}
-                >
+              {cart.map((item) => {
+                if (!item) return null; // güvenlik
+                const { id, title, image, qty } = item;
+                return (
                   <Box
-                    component="img"
-                    src={image}
-                    alt={title}
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      objectFit: "cover",
-                      borderRadius: 1,
-                      mr: 1.5,
-                    }}
-                  />
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="body2" noWrap>
-                      {title}
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <IconButton size="small" onClick={() => dec(id)}>
-                        <RemoveIcon fontSize="inherit" />
-                      </IconButton>
-                      <Typography mx={0.5}>{qty}</Typography>
-                      <IconButton size="small" onClick={() => inc(id)}>
-                        <AddIcon fontSize="inherit" />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => remove(id)}
+                    key={id}
+                    sx={{ display: "flex", alignItems: "center", mb: 1.5 }}
                   >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
+                    <Box
+                      component="img"
+                      src={image}
+                      alt={title}
+                      sx={{
+                        width: 44,
+                        height: 44,
+                        objectFit: "cover",
+                        borderRadius: 1,
+                        mr: 1.5,
+                      }}
+                    />
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Typography variant="body2" noWrap>
+                        {title}
+                      </Typography>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <IconButton
+                          size="small"
+                          onClick={lock(id, () => dec(id))}
+                          disabled={pending[id] || (Number(qty) || 0) <= 0}
+                        >
+                          <RemoveIcon fontSize="inherit" />
+                        </IconButton>
+                        <Typography mx={0.5}>{Number(qty) || 0}</Typography>
+                        <IconButton
+                          size="small"
+                          onClick={lock(id, () => inc(id))}
+                          disabled={pending[id]}
+                        >
+                          <AddIcon fontSize="inherit" />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={lock(id, () => remove(id))}
+                      disabled={pending[id]}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                );
+              })}
 
               {cart.length > 0 && (
                 <Fragment>
@@ -266,7 +290,15 @@ export default function Navbar() {
                       size="small"
                       variant="outlined"
                       color="error"
-                      onClick={clearCart}
+                      onClick={async () => {
+                        setClearing(true);
+                        try {
+                          await clear();
+                        } finally {
+                          setClearing(false);
+                        }
+                      }}
+                      disabled={clearing || uniqueCount === 0}
                     >
                       Clear
                     </Button>

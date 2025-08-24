@@ -1,12 +1,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { router } from "../routes/Router"; // createBrowserRouter objesi
+import { router } from "../routes/Router";
 
 axios.defaults.baseURL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
 axios.defaults.withCredentials = true;
 
-/* ---------------- interceptor ---------------- */
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -16,38 +15,47 @@ axios.interceptors.response.use(
     }
 
     const { data, status } = error.response;
+    const url = error.config?.url || "";
+    const isCart = url.startsWith("carts") || url.includes("/carts");
 
     switch (status) {
       case 400:
-        toast.error(data.message || "Bad request");
+        toast.error(data?.message || "Bad request");
         break;
       case 401:
-        toast.error(data.message || "Unauthorized");
+        toast.error(data?.message || "Unauthorized");
         router.navigate("/login");
         break;
       case 403:
-        toast.error(data.message || "Validation error");
+        toast.error(data?.message || "Validation error");
         router.navigate("/errors/validation-error", {
           state: { error: data, status },
         });
         break;
       case 404:
-        toast.error(data.message || "Not found");
+        if (isCart) {
+          toast.error(data?.message || "Cart item not found");
+          break;
+        }
+        toast.error(data?.message || "Not found");
         router.navigate("/errors/not-found");
         break;
       case 500:
+        if (isCart) {
+          toast.error(data?.message || "Server error");
+          break;
+        }
         router.navigate("/errors/server-error", {
           state: { error: data, status },
         });
         break;
       default:
-        toast.error(data.message || error.message);
+        toast.error(data?.message || error.message);
     }
     return Promise.reject(error);
   }
 );
 
-/* ---------------- tiny helpers ---------------- */
 const responseData = (res) => res.data;
 
 const requests = {
@@ -57,7 +65,6 @@ const requests = {
   del: (url) => axios.delete(url).then(responseData),
 };
 
-/* ---------------- resources ------------------ */
 export const products = {
   get: () => requests.get("products"),
   getById: (id) => requests.get(`products/${id}`),
@@ -66,20 +73,19 @@ export const products = {
   delete: (id) => requests.del(`products/${id}`),
 };
 
-export const errors = {
-  get400: () => requests.get("errors/bad-request"),
-  get401: () => requests.get("errors/unauthorized"),
-  get403: () => requests.get("errors/validation-error"),
-  get404: () => requests.get("errors/not-found"),
-  get500: () => requests.get("errors/server-error"),
-};
-
+// src/api/apiClient.js (sadece cart kısmı)
 export const cart = {
   get: () => requests.get("carts"),
   addItem: (productId, quantity = 1) =>
-    requests.post(`carts?productId=${productId}&quantity=${quantity}`, {}),
+    requests.post(
+      `carts?productId=${encodeURIComponent(productId)}&quantity=${quantity}`,
+      {}
+    ),
   removeItem: (productId, quantity = 1) =>
-    requests.del(`carts?productId=${productId}&quantity=${quantity}`),
+    requests.del(
+      `carts?productId=${encodeURIComponent(productId)}&quantity=${quantity}`
+    ),
+  clear: () => requests.del("carts/clear"), // ← eklendi
 };
 
-export default { products, errors, cart };
+export default { products, cart };

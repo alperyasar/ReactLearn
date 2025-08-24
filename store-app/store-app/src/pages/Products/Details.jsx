@@ -1,3 +1,4 @@
+// src/pages/Products/Details.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -11,34 +12,49 @@ import {
   Paper,
   Divider,
   Skeleton,
+  CircularProgress,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import requests from "../../api/apiClient";
+import { useCart } from "../../context/CartContext";
 
-const ProductDetails = () => {
+export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { add } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [addLoading, setAddLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let isMounted = true; // unmount sırasında setState engellemek için
+    let alive = true;
     (async () => {
       setLoading(true);
       try {
-        const data = await requests.products.getById(id); // Axios ile çek
-        if (isMounted) setProduct(data);
+        const data = await requests.products.getById(id);
+        if (alive) setProduct(data);
       } catch (err) {
-        if (isMounted) setError(err.message);
-        console.log(err.message);
+        if (alive) setError(err.message);
       } finally {
-        if (isMounted) setLoading(false);
+        if (alive) setLoading(false);
       }
     })();
-    return () => (isMounted = false);
+    return () => {
+      alive = false;
+    };
   }, [id]);
+
+  const handleAdd = async () => {
+    if (!product) return;
+    setAddLoading(true);
+    try {
+      await add(product);
+    } finally {
+      setAddLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -120,7 +136,7 @@ const ProductDetails = () => {
             </Typography>
 
             <Typography variant="h5" color="primary" sx={{ mb: 2 }}>
-              ${Number(product.price).toLocaleString()}
+              ${Number(product.price || 0).toLocaleString()}
             </Typography>
 
             <Divider sx={{ my: 2 }} />
@@ -133,14 +149,18 @@ const ProductDetails = () => {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<ShoppingCartIcon />}
                 fullWidth
-                onClick={() => {
-                  // Add to cart functionality will be implemented here
-                  console.log("Add to cart:", product.id);
-                }}
+                onClick={handleAdd}
+                disabled={addLoading}
+                startIcon={
+                  addLoading ? (
+                    <CircularProgress size={18} color="inherit" />
+                  ) : (
+                    <ShoppingCartIcon />
+                  )
+                }
               >
-                Add to Cart
+                {addLoading ? "ADDING..." : "ADD TO CART"}
               </Button>
             </Box>
           </Grid>
@@ -148,6 +168,4 @@ const ProductDetails = () => {
       </Paper>
     </Container>
   );
-};
-
-export default ProductDetails;
+}
